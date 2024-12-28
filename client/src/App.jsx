@@ -13,6 +13,7 @@ import ShoppingAccount from "./pages/shopping/Account";
 import ShoppingCheckout from "./pages/shopping/Checkout";
 import ShoppingHome from "./pages/shopping/Home";
 import ShoppingProductList from "./pages/shopping/ProductList";
+import Unauth from "./pages/unauth";
 
 function App() {
   const isAuthenticated = false;
@@ -63,6 +64,7 @@ function App() {
           <Route path="checkout" element={<ShoppingCheckout />} />
         </Route>
         <Route path="*" element={<NotFound />} />
+        <Route path="*/unauth" element={<Unauth />} />
       </Routes>
     </div>
   );
