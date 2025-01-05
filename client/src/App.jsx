@@ -23,7 +23,7 @@ function App() {
   };
 
   return (
-    <div className="flex flex-col overflow-hidden bg-white">
+    <div className="flex overflow-hidden w-full bg-white">
       {/* common components */}
 
       <Routes>
