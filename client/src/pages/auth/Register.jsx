@@ -1,13 +1,22 @@
 import Form from "@/components/common/Form";
 import { registerFormControls } from "@/config";
+import { register } from "@/store/auth-slice";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const initialState = {
     userName: "",
     email: "",
     password: "",
+  };
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(register).then(() => navigate("/auth/login"));
   };
 
   const [formData, setFormData] = useState(initialState);
@@ -32,7 +41,7 @@ const Register = () => {
         buttonText="Create account"
         formData={formData}
         setFormData={setFormData}
-        onSubmit={() => {}}
+        onSubmit={onSubmit}
       />
     </div>
   );

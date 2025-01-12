@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 /*This code is implementing a Redux slice for managing authentication state using Redux Toolkit,
  a library that simplifies writing Redux logic.  */
@@ -9,6 +9,18 @@ const initialState = {
   user: null, // Holds information about the authenticated user (default is null).
 };
 
+export const register = createAsyncThunk("/auth/register", async (formData) => {
+  const response = await axios.post(
+    "http://localhost:5000/api/auth/register",
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+});
+
 /*The createSlice function helps you write Redux slices more easily.
 A slice represents a specific piece of the Redux store, including its state, actions, and reducers. */
 
@@ -18,6 +30,7 @@ const authSlice = createSlice({
   reducers: {
     // Defines functions (called reducers) that handle changes to this slice of the state.
     setUser: (state, action) => {}, // action is the payload dispatched by Redux actions, usually containing data for updating the state.
+    extraReducer,
   },
 });
 
