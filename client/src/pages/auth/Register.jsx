@@ -1,5 +1,6 @@
 import Form from "@/components/common/Form";
 import { registerFormControls } from "@/config";
+import { useToast } from "@/hooks/use-toast";
 import { register } from "@/store/auth-slice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -8,6 +9,7 @@ import { Link, useNavigate } from "react-router-dom";
 const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { toast } = useToast();
   const initialState = {
     userName: "",
     email: "",
@@ -16,7 +18,16 @@ const Register = () => {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(register).then(() => navigate("/auth/login"));
+    dispatch(register).then((data) => {
+      console.log(data);
+      if (data?.payload.success) {
+        toast({
+          title: "Success",
+          description: "Account created successfully",
+        });
+        navigate("/auth/login");
+      }
+    });
   };
 
   const [formData, setFormData] = useState(initialState);

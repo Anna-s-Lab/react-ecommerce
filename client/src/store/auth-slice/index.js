@@ -30,7 +30,22 @@ const authSlice = createSlice({
   reducers: {
     // Defines functions (called reducers) that handle changes to this slice of the state.
     setUser: (state, action) => {}, // action is the payload dispatched by Redux actions, usually containing data for updating the state.
-    extraReducer,
+    extraReducer: (builder) => {
+      builder
+        .addCase(register.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(register.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.isAuthenticated = true;
+          state.user = null;
+        })
+        .addCase(register.rejected, (state) => {
+          state.isLoading = false;
+          state.isAuthenticated = false;
+          state.user = null;
+        });
+    },
   },
 });
 
