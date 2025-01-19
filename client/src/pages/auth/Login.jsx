@@ -1,5 +1,6 @@
 import Form from "@/components/common/Form";
 import { loginFormControls } from "@/config";
+import { login } from "@/store/auth-slice";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -7,6 +8,25 @@ const Login = () => {
   const initialState = { email: "", password: "" };
 
   const [formData, setFormData] = useState(initialState);
+
+  const onSubmit = (event) => {
+    event.preventDefault();
+    dispatch(login(formData)).then((data) => {
+      console.log(data);
+      if (data?.payload.success) {
+        toast({
+          title: "Success",
+          description: data?.payload.message,
+        });
+        navigate("/auth/login");
+      } else {
+        toast({
+          title: data?.payload?.message,
+          variant: "destructive",
+        });
+      }
+    });
+  };
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="text-center">
@@ -28,7 +48,7 @@ const Login = () => {
         buttonText="Create account"
         formData={formData}
         setFormData={setFormData}
-        onSubmit={() => {}}
+        onSubmit={onSubmit}
       />
     </div>
   );

@@ -16,9 +16,11 @@ const Register = () => {
     password: "",
   };
 
+  const [formData, setFormData] = useState(initialState);
+
   const onSubmit = (event) => {
     event.preventDefault();
-    dispatch(register).then((data) => {
+    dispatch(register(formData)).then((data) => {
       console.log(data);
       if (data?.payload.success) {
         toast({
@@ -26,11 +28,14 @@ const Register = () => {
           description: "Account created successfully",
         });
         navigate("/auth/login");
+      } else {
+        toast({
+          title: data?.payload?.message,
+          variant: "destructive",
+        });
       }
     });
   };
-
-  const [formData, setFormData] = useState(initialState);
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="text-center">

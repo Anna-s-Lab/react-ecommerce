@@ -20,6 +20,7 @@ const Form = ({
     let element = null;
     const { name, placeholder, type, componentType } = controlItem;
     console.log(controlItem);
+    console.log("formData", formData);
     const value = formData[name];
     switch (componentType) {
       case inputTypes.INPUT:
@@ -30,7 +31,9 @@ const Form = ({
             placeholder={placeholder}
             id={name}
             type={type}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            onChange={(e) => {
+              setFormData({ ...formData, [name]: e.target.value });
+            }}
           />
         );
         break;

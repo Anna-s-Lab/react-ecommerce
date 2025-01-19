@@ -10,6 +10,7 @@ const initialState = {
 };
 
 export const register = createAsyncThunk("/auth/register", async (formData) => {
+  console.log("Entra en el thunk");
   const response = await axios.post(
     "http://localhost:5000/api/auth/register",
     formData,
@@ -20,6 +21,37 @@ export const register = createAsyncThunk("/auth/register", async (formData) => {
 
   return response.data;
 });
+
+export const login = createAsyncThunk("/auth/login", async (formData) => {
+  const response = await axios.post(
+    "http://localhost:5000/api/auth/login",
+    formData,
+    {
+      withCredentials: true,
+    }
+  );
+
+  return response.data;
+});
+
+export const checkAuth = createAsyncThunk(
+  "/auth/check-auth",
+  async (formData) => {
+    const response = await axios.get(
+      "http://localhost:5000/api/auth/check-auth",
+      formData,
+      {
+        withCredentials: true,
+        header: {
+          "Cache-control":
+            "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      }
+    );
+
+    return response.data;
+  }
+);
 
 /*The createSlice function helps you write Redux slices more easily.
 A slice represents a specific piece of the Redux store, including its state, actions, and reducers. */
@@ -41,6 +73,32 @@ const authSlice = createSlice({
           state.user = null;
         })
         .addCase(register.rejected, (state) => {
+          state.isLoading = false;
+          state.isAuthenticated = false;
+          state.user = null;
+        })
+        .addCase(login.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(login.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.isAuthenticated = true;
+          state.user = action?.payload.user;
+        })
+        .addCase(login.rejected, (state) => {
+          state.isLoading = false;
+          state.isAuthenticated = false;
+          state.user = null;
+        })
+        .addCase(checkAuth.pending, (state) => {
+          state.isLoading = true;
+        })
+        .addCase(checkAuth.fulfilled, (state, action) => {
+          state.isLoading = false;
+          state.isAuthenticated = true;
+          state.user = action?.payload.user;
+        })
+        .addCase(checkAuth.rejected, (state) => {
           state.isLoading = false;
           state.isAuthenticated = false;
           state.user = null;

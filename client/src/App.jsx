@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import AdminLayout from "./components/admin/Layout";
 import AuthLayout from "./components/auth/Layout";
@@ -14,13 +16,24 @@ import ShoppingCheckout from "./pages/shopping/Checkout";
 import ShoppingHome from "./pages/shopping/Home";
 import ShoppingProductList from "./pages/shopping/ProductList";
 import Unauth from "./pages/unauth";
+import { checkAuth } from "./store/auth-slice";
 
 function App() {
-  const isAuthenticated = false;
-  const user = {
-    name: "Ana",
-    role: "admin",
-  };
+  const { isAuthenticated, user, isLoading } = useSelector(
+    (state) => state.auth
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(checkAuth());
+  }, [dispatch]);
+
+  if (isLoading)
+    return (
+      <div className="w-full h-screen flex justify-center items-center">
+        Loading...
+      </div>
+    );
 
   return (
     <div className="flex overflow-hidden w-full bg-white">
